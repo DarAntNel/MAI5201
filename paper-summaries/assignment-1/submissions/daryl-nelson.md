@@ -1,21 +1,21 @@
-# Assignment #1
-## Name: Daryl Nelson
-## USI: 1021215
-## Date: 29/07/2025
+## Student Name: Daryl Nelson  
+## Student ID: 1021215  
+## Assignment #1  
+## Date: 29/07/2025 
+## Word Count: 302
 
+##
 
 What is most interesting in the paper?
 
-Key innovations and contributions
-Historical or technical significance
-Novel approaches or insights
+What I find most interesting about this paper is the technique used and the feats it was able to achieve. This system is relatively simple, or even primitive, when compared to modern day NLP techniques. So, the capability of portraying what would be classified as intelligence especially given that it was achieved at a time when there were severe limitations in hardware, memory, and compute resources makes it even more impressive. The concepts were also relatively simple to understand when compared to modern techniques.
+
+
 What could the paper have done better?
 
-Methodological limitations
-Writing clarity issues
-Missing considerations or analyses
+When reading this paper, I was not able to immediately grasp certain concepts. The writer explained familiar ideas but used unfamiliar terminology, which made parts of the paper harder to follow. I believe the paper could have expanded more on the shortcomings of the technology, perhaps in a dedicated "future work" section. This was particularly noticeable due to the lack of in-depth analysis of more complex sentence structures and how the system handles potential edge cases. While the paper highlights the system’s power in its ability to create and maintain the illusion of understanding (Weizenbaum, J. 1966), it mainly focuses on user reactions and ideal scenarios where the system builds a belief structure from conversations. However, it lacks consideration of the possible ethical implications of such a system.
+
 What questions do you have from reading the paper?
 
-Technical questions about implementation
-Theoretical questions about approaches
-Follow-up research directions
+A few questions that arose while reading the paper included the scalability of the system. It seems that there needs to be a large number of decomposition and reassembly templates to handle the wide variety of sentence structures users might input. I was also curious about how a similar approach would function in today’s modern era, given the wide availability of data, processing power, and memory resources.
+
