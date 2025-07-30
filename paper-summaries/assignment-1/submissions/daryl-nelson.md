@@ -2,7 +2,7 @@
 ## Student ID: 1021215  
 ## Assignment #1  
 ## Date: 29/07/2025 
-## Word Count: 302
+## Word Count: 295 (excluded questions and references)
 
 ##
 
