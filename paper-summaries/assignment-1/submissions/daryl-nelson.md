@@ -18,3 +18,9 @@ When reading this paper, I was not able to immediately grasp certain concepts. T
 What questions do you have from reading the paper?
 
 A few questions that arose while reading the paper included the scalability of the system. It seems that there needs to be a large number of decomposition and reassembly templates to handle the wide variety of sentence structures users might input. I was also curious about how a similar approach would function in today’s modern era, given the wide availability of data, processing power, and memory resources.
+
+
+
+References: 
+
+Weizenbaum, J. (1966). ELIZA—A computer program for the study of natural language communication between man and machine. Communications of the ACM, 9(1), 36–45. https://doi.org/10.1145/365153.365168
