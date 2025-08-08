@@ -507,18 +507,24 @@ def extract_addresses(text: str) -> List[dict]:
     # - City, state/country combinations
     
     addresses = []
+
+    po_box_pattern = r'\bP\.?O\.?\s+Box\s+\d+\b(?:,\s*[\w\s]+)*(?:,\s*Guyana|\bGY\b)?'# Your regex pattern here
     
-    # Pattern for P.O. Box addresses
-    # po_box_pattern = r''  # Your regex pattern here
-    
-    # Pattern for street addresses  
-    # street_pattern = r''  # Your regex pattern here
-    
-    # TODO: Find P.O. Box addresses
-    # TODO: Find street addresses
-    # TODO: Return list of dictionaries with address info
-    
-    return []  # TODO: Implement address extraction
+    street_pattern = r'\d+\s+[\w\s]+\b(?:Street|St\.|Avenue|Ave\.|Road|Rd\.|Lane|Ln\.|Drive|Dr\.|Alley|Way|Boulevard|Blvd\.|Place|Pl\.)\b(?:,\s*[\w\s]+){1,3}'    # Your regex pattern here
+
+    for match in re.finditer(po_box_pattern, text, re.IGNORECASE):
+        addresses.append({
+            'full_address': match.group().strip(),
+            'type': 'po_box'
+        })
+
+    for match in re.finditer(street_pattern, text):
+        addresses.append({
+            'full_address': match.group().strip(),
+            'type': 'street'
+        })
+
+    return addresses
 
 
 def parse_log_files(log_text: str) -> List[dict]:
