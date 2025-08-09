@@ -190,8 +190,19 @@ def normalize_text(text: str) -> str:
     #    - r'[?]{2,}' for multiple questions
     #    - r'[.]{3,}' for ellipses (3+ dots)
     # 4. Normalize whitespace: r'\s+' -> ' ' and strip()
-    
-    return text  # TODO: Replace with your implementation
+
+    text = text.casefold()
+
+    text = ''.join(
+        ch for ch in unicodedata.normalize('NFKD', text)
+        if not unicodedata.combining(ch)
+    )
+
+    text = re.sub(r'[^\w\s]', '', text)
+
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    return text
 
 
 def remove_accents(text: str) -> str:
@@ -429,11 +440,20 @@ def levenshtein_distance(s1, s2):
         >>> levenshtein_distance("saturday", "sunday")
         3
     """
-    # TODO: Implement Levenshtein distance algorithm
-    # This should be the same as edit_distance but with a different name
-    # Use the same dynamic programming approach
-    
-    return 0  # TODO: Replace with your implementation
+    if len(s1) > len(s2):
+        s1, s2 = s2, s1
+
+    previous_row = list(range(len(s1) + 1))
+    for i2, c2 in enumerate(s2, 1):
+        current_row = [i2]
+        for i1, c1 in enumerate(s1, 1):
+            insert_cost = previous_row[i1] + 1
+            delete_cost = current_row[i1 - 1] + 1
+            substitute_cost = previous_row[i1 - 1] + (c1 != c2)
+            current_row.append(min(insert_cost, delete_cost, substitute_cost))
+        previous_row = current_row
+
+    return previous_row[-1]
 
 
 def spell_check(word, candidates):
@@ -461,8 +481,9 @@ def spell_check(word, candidates):
     
     if not candidates:
         return word
-    
-    return ""  # TODO: Replace with your implementation
+
+    best_word = min(candidates, key=lambda cand: levenshtein_distance(word, cand))
+    return best_word
 
 
 def name_matching(query, candidates):
@@ -491,5 +512,7 @@ def name_matching(query, candidates):
     
     if not candidates:
         return query
-    
-    return ""  # TODO: Replace with your implementation
+
+    query_lower = query.lower()
+    best_candidate = min(candidates, key=lambda cand: levenshtein_distance(query_lower, cand.lower()))
+    return best_candidate
