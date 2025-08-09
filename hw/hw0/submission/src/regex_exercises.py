@@ -557,18 +557,40 @@ def parse_log_files(log_text: str) -> List[dict]:
     # Hint: Apache/Nginx log format is typically:
     # IP - USER [TIMESTAMP] "METHOD PATH PROTOCOL" STATUS SIZE
     # Use named groups for easier extraction
-    
-    # pattern = r''  # Your regex pattern here with named groups
-    
+
+    pattern = re.compile(
+        r'(?P<ip>(?:\d{1,3}\.){3}\d{1,3}|'  # IPv4
+        r'(?:[A-Fa-f0-9:]+))'  # IPv6
+        r'\s+-\s+(?P<user>[^\s]+)'  # Username or '-'
+        r'\s+\[(?P<timestamp>[^\]]+)\]'  # Timestamp
+        r'\s+[\'"](?P<method>[A-Z]+)\s+(?P<path>[^\s]+)\s+(?P<protocol>HTTP/[0-9.]+)[\'"]'
+        r'\s+(?P<status>\d{3})'  # Status code
+        r'\s+(?P<size>\d+|-)'  # Size or '-'
+    )  # Your regex pattern here with named groups
+
     log_entries = []
     lines = log_text.strip().split('\n')
-    
+
     for line in lines:
-        if line.strip():  # Skip empty lines
-            # TODO: Parse each line and extract components
-            pass
-    
-    return []  # TODO: Implement log parsing
+        match = pattern.search(line)
+        if match:
+            data = match.groupdict()
+            data["user"] = '' if data["user"] == "-" else data["user"]
+            data["size"] = '' if data["size"] == "-" else data["size"]
+            log_entries.append({
+                "ip": data["ip"],
+                "user": data["user"],
+                "timestamp": data["timestamp"],
+                "method": data["method"],
+                "path": data["path"],
+                "status": data["status"],
+                "size": data["size"]
+            })
+
+
+    return log_entries
+
+
 
 
 if __name__ == "__main__":
