@@ -36,9 +36,7 @@ def whitespace_tokenize(text: str) -> List[str]:
         >>> whitespace_tokenize("  Hello   world  ")
         ['Hello', 'world']
     """
-    # TODO: Implement basic whitespace tokenization
-    # Hint: Use the string split() method
-    return []
+    return text.strip().split()
 
 
 def punctuation_tokenize(text: str) -> List[str]:
@@ -59,12 +57,7 @@ def punctuation_tokenize(text: str) -> List[str]:
         >>> punctuation_tokenize("It's working.")
         ['It', "'", 's', 'working', '.']
     """
-    # TODO: Implement punctuation tokenization
-    # Hints:
-    # 1. Use regex to separate words from punctuation
-    # 2. Consider contractions (they should be split)
-    # 3. Pattern ideas: \w+ for words, [^\w\s] for punctuation
-    return []
+    return re.findall(r"\w+|[^\w\s]", text)
 
 
 def sentence_tokenize(text: str) -> List[str]:
@@ -85,12 +78,19 @@ def sentence_tokenize(text: str) -> List[str]:
         >>> sentence_tokenize("Dr. Smith went to U.S.A. yesterday.")
         ['Dr. Smith went to U.S.A. yesterday.']
     """
-    # TODO: Implement sentence tokenization
-    # Hints:
-    # 1. Split on sentence-ending punctuation (.!?)
-    # 2. Handle abbreviations like "Dr.", "U.S.A."
-    # 3. Preserve punctuation at end of sentences
-    return []
+    abbreviations = r"(?:Mr|Mrs|Ms|Dr|Prof|Sr|Jr|St|U\.S\.A|U\.K|etc)"
+    pattern = rf"(?<=[.!?])\s+(?=[A-Z])"
+
+    sentences = re.split(pattern, text)
+
+    merged = []
+    for s in sentences:
+        if merged and re.fullmatch(abbreviations + r"\.", merged[-1].split()[-1]):
+            merged[-1] += " " + s
+        else:
+            merged.append(s)
+
+    return [s.strip() for s in merged if s.strip()]
 
 
 def advanced_tokenize(text: str) -> List[str]:
@@ -103,14 +103,57 @@ def advanced_tokenize(text: str) -> List[str]:
     - URLs (stay together)
     - Email addresses (stay together)
     """
-    # TODO: Implement advanced tokenization
-    # Hints:
-    # 1. Preserve URLs and email addresses as single tokens
-    # 2. Handle contractions by splitting them appropriately
-    # 3. Keep hyphenated words together
-    # 4. Split on punctuation otherwise
-    
-    return []  # TODO: Implement advanced tokenization
+    url_pattern = r'https?://\S+|www\.\S+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:/\S*)?'
+    token_pattern = re.compile(
+        f"{url_pattern}|[a-zA-Z]+(?:-[a-zA-Z]+)*|n't|'[a-z]+|[^\w\s]",
+        re.IGNORECASE
+    )
+
+    tokens = token_pattern.findall(text)
+
+    output = []
+    i = 0
+    while i < len(tokens):
+        tok = tokens[i]
+
+        # Fix for "can't" style: if token is 'can' followed by "'t", merge as 'ca' + "n't"
+        if i + 1 < len(tokens):
+            next_tok = tokens[i + 1]
+            if tok.lower() == "can" and next_tok.lower() == "'t":
+                output.append("ca")
+                output.append("n't")
+                i += 2
+                continue
+            # Also handle other cases like "don" + "'t" -> "don" + "'t" (keep separate)
+
+        # Handle contractions like "n't", "'s", "'m", "'ll", "'re", "'ve", "'d"
+        if re.fullmatch(r"n't|'[a-z]+", tok, re.IGNORECASE):
+            output.append(tok.lower())
+            i += 1
+            continue
+
+        # Otherwise just add token as is
+        output.append(tok)
+        i += 1
+
+    # Post-processing for hyphenated contractions like "don't-care":
+    final_tokens = []
+    for t in output:
+        if "-" in t and ("'" in t or "’" in t):
+            # e.g. "don't-care" -> ['don', "'t", '-', 'care']
+            parts = t.split("-")
+            for idx, p in enumerate(parts):
+                if p.lower().endswith("n't") and "'" not in p:
+                    final_tokens.append(p[:-3])
+                    final_tokens.append("n't")
+                else:
+                    final_tokens.append(p)
+                if idx < len(parts) - 1:
+                    final_tokens.append('-')
+        else:
+            final_tokens.append(t)
+
+    return final_tokens
 
 
 def normalize_text(text: str) -> str:
