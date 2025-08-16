@@ -1,10 +1,10 @@
 # Class-Based n-gram Models of Natural Language - Paper Summary
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
+**Student Name**: Daryl Nelson
+**Student ID**: 1021215  
 **Assignment**: Paper Summary 3  
-**Date**: [Submission Date]  
-**Word Count**: [Your word count]
+**Date**: 16/08/2025
+**Word Count**: 221
 
 ## Citation
 Brown, P. F., deSouza, P. V., Mercer, R. L., Della Pietra, V. J., & Lai, J. C. (1992). Class-based n-gram models of natural language. *Computational Linguistics*, 18(4), 467-479.
